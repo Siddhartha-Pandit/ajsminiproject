@@ -78,7 +78,6 @@ input[type="color"]::-moz-color-swatch {
   height: 50vh;
 }
 
-/* https://youtu.be/la-0HOaNL10?t=1509 */
 .active {
   background-color: #e0e9ff;
 }
