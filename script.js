@@ -70,6 +70,7 @@ linkButton.addEventListener("click", () => {
     userLink = "http://" + userLink;
     modifyText(linkButton.id, false, userLink);
   }
+  window.open(userLink, "_blank");
 });
 //Highlight clicked button
 const highlighter = (className, needsRemoval) => {
@@ -101,3 +102,128 @@ const highlighterRemover = (className) => {
   });
 };
 window.onload = initializer();
+
+// const convertBoldToRtf = (html) => {
+//   return html.replace(/<b>(.*?)<\/b>/g, "{\\b $1}");
+// };
+
+// const convertItalicToRtf = (html) => {
+//   return html.replace(/<i>(.*?)<\/i>/g, "{\\i $1}");
+// };
+
+// const convertUnderlineToRtf = (html) => {
+//   return html.replace(/<u>(.*?)<\/u>/g, "{\\ul1 $1\\ul0}");
+// };
+
+// const convertStrikeoutToRtf = (html) => {
+//   return html.replace(/<strike>(.*?)<\/strike>/g, "{\\strike $1}");
+// };
+
+// const convertSuperscriptToRtf = (html) => {
+//   return html.replace(/<sup>(.*?)<\/sup>/g, "{\\super $1}");
+// };
+
+// const convertSubscriptToRtf = (html) => {
+//   return html.replace(/<sub>(.*?)<\/sub>/g, "{\\sub $1}");
+// };
+// function htmlToRtf(html) {
+//   html = html.replace(/<br>/g, "\\line ");
+
+//   // Convert other HTML tags to RTF format
+//   html = convertBoldToRtf(html);
+//   html = convertItalicToRtf(html);
+//   html = convertUnderlineToRtf(html);
+//   html = convertStrikeoutToRtf(html);
+//   html = convertSuperscriptToRtf(html);
+//   html = convertSubscriptToRtf(html);
+//   html=convertAlignmentToRtf(html);
+//   html=convertListToRtf(html);
+
+//   // Add more conversions for other HTML tags as needed
+
+//   // Return the final RTF content
+//   return `{\\rtf1\\ansi\\ansicpg1252\\deff0\\pard ${html}\\par}`;
+// }
+// // Convert <ol> and <ul> tags to RTF format
+// const convertListToRtf = (html) => {
+//   // Convert <ol> tags to RTF numbered list
+//   html = html.replace(/<ol>(.*?)<\/ol>/g, (match, p1) => {
+//     const items = p1.split("</li><li>");
+//     let rtfList = "";
+//     items.forEach((item, index) => {
+//       rtfList += `\\li${index + 1} ${item
+//         .replace("<li>", "")
+//         .replace("</li>", "")}\\line `;
+//     });
+//     return `${rtfList}\\line `;
+//   });
+
+//   // Convert <ul> tags to RTF bullet list
+//   html = html.replace(/<ul>(.*?)<\/ul>/g, (match, p1) => {
+//     const items = p1.split("</li><li>");
+//     let rtfList = "";
+//     items.forEach((item) => {
+//       rtfList += `\\bullet ${item
+//         .replace("<li>", "")
+//         .replace("</li>", "")}\\line `;
+//     });
+//     return `${rtfList}\\line `;
+//   });
+
+//   return html;
+// };
+
+// // Convert text alignment to RTF format
+// const convertAlignmentToRtf = (html) => {
+//   html = html.replace(
+//     /<div style="text-align:(.*?)">(.*?)<\/div>/g,
+//     (match, p1, p2) => {
+//       let alignment = "";
+//       switch (p1) {
+//         case "left":
+//           alignment = "\\ql";
+//           break;
+//         case "center":
+//           alignment = "\\qc";
+//           break;
+//         case "right":
+//           alignment = "\\qr";
+//           break;
+//         case "justify":
+//           alignment = "\\qj";
+//           break;
+//         default:
+//           alignment = "\\ql"; // Default to left alignment
+//           break;
+//       }
+//       return `${alignment} ${p2}\\line `;
+//     }
+//   );
+
+//   return html;
+// };
+
+// // Add more functions for header tags, font, font size, font color, highlight, etc.
+
+// const handleExport = () => {
+//   // Get the content from the editor
+//   const htmlContent = document.getElementById("text-input").innerHTML;
+
+//   // Convert HTML content to RTF format
+//   const rtfContent = htmlToRtf(htmlContent);
+
+//   // Create a Blob containing the RTF content
+//   const blob = new Blob([rtfContent], { type: "text/rtf" });
+
+//   // Create a temporary URL for the Blob
+//   const url = window.URL.createObjectURL(blob);
+
+//   // Create a temporary anchor element
+//   const a = document.createElement("a");
+//   a.href = url;
+//   a.download = "exported_content.rtf";
+//   a.click();
+
+//   // Release the URL object to free up memory
+//   window.URL.revokeObjectURL(url);
+// };
