@@ -7,8 +7,6 @@ const Editor = () => {
   const [fontNameOptions, setFontNameOptions] = useState([]);
   const [fontSizeOptions, setFontSizeOptions] = useState([]);
   const [activeButtons, setActiveButtons] = useState([]);
-  const [content, setContent] = useState(false);
-  const [title, setTitle] = useState("Untitled");
 
   useEffect(() => {
     const fontList = [
@@ -59,45 +57,13 @@ const Editor = () => {
   const handleAdvancedOptionChange = (command, value) => {
     document.execCommand(command, false, value);
   };
-  const changeName = () => {
-    console.log("this is clicked");
-    setContent(true);
-  };
-  const handleTitleChange = (event) => {
-    setTitle(event.target.value);
-  };
+
   //Highlight clicked button
 
   return (
     <>
       <div>
         <div className="container">
-          <div className="title-container">
-            <div>
-              <img
-                src="favicon.png"
-                alt=""
-                srcset=""
-                height="52px"
-                onClick={() => setContent(false)}
-              />
-            </div>
-            <div>
-              {content ? (
-                <div>
-                  <input
-                    className="text-box"
-                    type="text"
-                    value={title}
-                    onChange={handleTitleChange}
-                  />
-                </div>
-              ) : (
-                <div onClick={changeName}>{title}</div>
-              )}
-            </div>
-          </div>
-
           <div className="options">
             <button
               id="bold"
