@@ -1,16 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import useFetch from "../useFetch";
+import { addNotes, setNote } from "../features/noteSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useParams } from "react-router-dom";
 
 function Navbar() {
   const [content, setContent] = useState(false);
   const [title, setTitle] = useState("Untitled");
+  const { data, isPending, error } = useFetch(`http://127.0.0.1:8000/notes/`);
+  const dispatch = useDispatch();
+  const { pathname } = useLocation();
+  const { id } = useParams();
+  const sirshak = useSelector((state) => state.notes);
+  useEffect(() => {
+    console.log("I am the actual data ", data);
+    if (data && data.length > 0) {
+      const newData = data.map((item) => ({
+        id: item.id,
+        title: item.title,
+        content: item.content,
+      }));
+
+      newData.forEach((item) => {
+        dispatch(addNotes(item));
+      });
+    }
+  }, [data, isPending, error]);
 
   const changeName = () => {
     console.log("this is clicked");
     setContent(true);
   };
+  const changeDone = () => {
+    if (pathname === "/editor") {
+      dispatch(setNote(title));
+      setContent(false);
+    }
+  };
 
-  const handleTitleChange = (event) => {
-    setTitle(event.target.value);
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
   };
 
   const Sidebar = () => {
@@ -19,6 +48,13 @@ function Navbar() {
     const toggleSidebar = () => {
       setIsOpen(!isOpen);
     };
+    // useEffect(() => {
+    //   if (pathname === "/") {
+    //     setTitle("Untitled");
+    //   } else if (pathname === `/editor/${id}`) {
+    //     setTitle(sirshak);
+    //   }
+    // }, [pathname]);
 
     return (
       <div className="navbar">
@@ -30,27 +66,36 @@ function Navbar() {
         <div className="title-container">
           <div>
             <img
-              src="favicon.png"
+              src="./favicon.png"
               alt=""
               srcset=""
               height="52px"
-              onClick={() => setContent(false)}
+              onClick={changeDone}
             />
           </div>
           <div>
-            {content ? (
-              <div>
-                <input
-                  className="text-box"
-                  type="text"
-                  value={title}
-                  onChange={handleTitleChange}
-                />
-              </div>
-            ) : (
+            {pathname == "/editor" && (
               <div onClick={changeName} className="titles">
-                {title}
+                {content ? (
+                  <div>
+                    <input
+                      className="text-box"
+                      type="text"
+                      value={title}
+                      onChange={handleTitleChange}
+                      autoFocus
+                    />
+                  </div>
+                ) : (
+                  title
+                )}
               </div>
+            )}
+            {pathname == "/" && !content && (
+              <div className="titles">Notepad</div> // Move this outside the inner div
+            )}
+            {pathname !== `/editor` && pathname !== "/" && !content && (
+              <div className="titles">{title}</div>
             )}
           </div>
         </div>

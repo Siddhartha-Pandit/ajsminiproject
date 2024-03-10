@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
-
+import useFetch from "../useFetch";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 const Editor = () => {
-  //List of fontlist
-
-  //   let fontSizeRef = document.getElementById("fontSize");
-  const [fontNameOptions, setFontNameOptions] = useState([]);
-  const [fontSizeOptions, setFontSizeOptions] = useState([]);
+  const [data, setData] = useState("");
+  const [body, setBody] = useState("");
+  const [isPending, setIsPending] = useState(false);
   const [activeButtons, setActiveButtons] = useState([]);
 
+  const [fontNameOptions, setFontNameOptions] = useState([]);
+  const [fontSizeOptions, setFontSizeOptions] = useState([]);
+
+  const apiUrl = process.env.REACT_APP_API_URL;
+  const navigate = useNavigate();
+  const title = useSelector((state) => state.newdata);
   useEffect(() => {
     const fontList = [
       "Arial",
@@ -18,15 +24,14 @@ const Editor = () => {
       "Courier New",
       "cursive",
     ];
-    setFontNameOptions(
-      fontList.map((value, index) => (
-        <option key={index} value={value}>
-          {value}
-        </option>
-      ))
-    );
+    const fontNameOptions = fontList.map((value, index) => (
+      <option key={index} value={value}>
+        {value}
+      </option>
+    ));
 
     const sizeOptions = [];
+
     for (let i = 1; i <= 7; i++) {
       sizeOptions.push(
         <option key={i} value={i}>
@@ -36,10 +41,48 @@ const Editor = () => {
     }
 
     setFontSizeOptions(sizeOptions);
+    setFontNameOptions(fontNameOptions);
   }, []);
 
+  const handleSave = (e) => {
+    e.preventDefault();
+    const formattedContent = document.getElementById("text-input").innerHTML;
+
+    console.log("This is title", title);
+    const len = title.length;
+    const blog = {
+      title: title[len - 1],
+
+      content: formattedContent,
+    };
+
+    setIsPending(true);
+    fetch("http://127.0.0.1:8000/notes/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(blog),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to save data");
+        }
+        console.log("Adding new notes");
+        return response.json();
+        navigate("/");
+      })
+      .then(() => {
+        setIsPending(false);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error("Error saving data:", error);
+        setIsPending(false);
+      });
+  };
+
   const handleButtonClick = (command, needsRemoval) => {
-    //execCommand executes command on selected text
     console.log("Executing command:", command);
     document.execCommand(command, false, null);
     if (needsRemoval) {
@@ -54,17 +97,31 @@ const Editor = () => {
     }
   };
 
-  const handleAdvancedOptionChange = (command, value) => {
-    document.execCommand(command, false, value);
+  const handlesetItem = (e) => {
+    setData(e.target.value);
   };
-
-  //Highlight clicked button
+  const handleAdvancedOptionChange = (command, value) => {
+    if (command === "fontName") {
+      document.execCommand(command, false, value);
+    } else if (command === "fontSize") {
+      document.execCommand("fontSize", false, value);
+    } else {
+      document.execCommand(command, false, value);
+    }
+  };
 
   return (
     <>
       <div>
         <div className="container">
           <div className="options">
+            <button
+              id="save"
+              className="option-button format"
+              onClick={handleSave}
+            >
+              Save
+            </button>
             <button
               id="bold"
               className="option-button format"
@@ -253,7 +310,11 @@ const Editor = () => {
               <label htmlFor="backColor">Highlight Color</label>
             </div>
           </div>
-          <div id="text-input" contentEditable="true"></div>
+          <div
+            id="text-input"
+            contentEditable="true"
+            onInput={(e) => setData(e.target.textContent)}
+          ></div>
         </div>
       </div>
     </>

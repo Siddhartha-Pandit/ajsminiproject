@@ -1,13 +1,13 @@
-import "./style.css";
-import Editor from "./components/Editor";
-import Navbar from "./components/Navbar";
+// App.js
+import React from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+import AppRoutes from "./AppRoutes";
+
 function App() {
   return (
-    <>
-      <Navbar />
-
-      <Editor />
-    </>
+    <Router>
+      <AppRoutes />
+    </Router>
   );
 }
 
