@@ -6,14 +6,13 @@ import { useLocation, useParams } from "react-router-dom";
 
 function Navbar() {
   const [content, setContent] = useState(false);
-  const [title, setTitle] = useState("Untitled");
+  const [title, setTitle] = useState("Notepad");
   const { data, isPending, error } = useFetch(`http://127.0.0.1:8000/notes/`);
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const { id } = useParams();
   const sirshak = useSelector((state) => state.notes);
   useEffect(() => {
-    console.log("I am the actual data ", data);
     if (data && data.length > 0) {
       const newData = data.map((item) => ({
         id: item.id,
@@ -28,7 +27,6 @@ function Navbar() {
   }, [data, isPending, error]);
 
   const changeName = () => {
-    console.log("this is clicked");
     setContent(true);
   };
   const changeDone = () => {
@@ -48,13 +46,15 @@ function Navbar() {
     const toggleSidebar = () => {
       setIsOpen(!isOpen);
     };
-    // useEffect(() => {
-    //   if (pathname === "/") {
-    //     setTitle("Untitled");
-    //   } else if (pathname === `/editor/${id}`) {
-    //     setTitle(sirshak);
-    //   }
-    // }, [pathname]);
+
+    if (pathname === "/") {
+      setTitle("Notepad");
+    } else if (pathname === `/editor/${id}`) {
+      console.log("Yo title ho mero", sirshak);
+      const len = sirshak.length;
+      console.log("This is the len", len);
+      setTitle(sirshak);
+    }
 
     return (
       <div className="navbar">

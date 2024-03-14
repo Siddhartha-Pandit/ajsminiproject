@@ -48,7 +48,6 @@ const Editor = () => {
     e.preventDefault();
     const formattedContent = document.getElementById("text-input").innerHTML;
 
-    console.log("This is title", title);
     const len = title.length;
     const blog = {
       title: title[len - 1],
@@ -68,7 +67,7 @@ const Editor = () => {
         if (!response.ok) {
           throw new Error("Failed to save data");
         }
-        console.log("Adding new notes");
+
         return response.json();
         navigate("/");
       })
@@ -83,31 +82,30 @@ const Editor = () => {
   };
 
   const handleButtonClick = (command, needsRemoval) => {
-    console.log("Executing command:", command);
     document.execCommand(command, false, null);
-    if (needsRemoval) {
-      const alreadyActive = activeButtons.includes(command);
-      setActiveButtons(alreadyActive ? [] : [command]);
-    } else {
-      setActiveButtons((prevButtons) =>
-        prevButtons.includes(command)
-          ? prevButtons.filter((button) => button !== command)
-          : [...prevButtons, command]
-      );
-    }
+    // if (needsRemoval) {
+    //   const alreadyActive = activeButtons.includes(command);
+    //   setActiveButtons(alreadyActive ? [] : [command]);
+    // } else {
+    //   setActiveButtons((prevButtons) =>
+    //     prevButtons.includes(command)
+    //       ? prevButtons.filter((button) => button !== command)
+    //       : [...prevButtons, command]
+    //   );
+    // }
   };
 
   const handlesetItem = (e) => {
     setData(e.target.value);
   };
   const handleAdvancedOptionChange = (command, value) => {
-    if (command === "fontName") {
-      document.execCommand(command, false, value);
-    } else if (command === "fontSize") {
-      document.execCommand("fontSize", false, value);
-    } else {
-      document.execCommand(command, false, value);
-    }
+    // if (command === "fontName") {
+    //   document.execCommand(command, false, value);
+    // } else if (command === "fontSize") {
+    //   document.execCommand("fontSize", false, value);
+    // } else {
+    //   document.execCommand(command, false, value);
+    // }
   };
 
   return (
@@ -120,7 +118,7 @@ const Editor = () => {
               className="option-button format"
               onClick={handleSave}
             >
-              Save
+              <i class="fa-solid fa-floppy-disk"></i>
             </button>
             <button
               id="bold"

@@ -35,10 +35,10 @@ const EditorNew = () => {
 
   return (
     <>
-      <div>
-        <div className="show" dangerouslySetInnerHTML={{ __html: content }}>
-          {/* {content && content} */}
-        </div>
+      <div className="show">
+        {/* <h1 dangerouslySetInnerHTML={{ __html: content.title }}></h1> */}
+        <h1 lassName="show">{data.title}</h1>
+        <div dangerouslySetInnerHTML={{ __html: content }}></div>
       </div>
     </>
   );

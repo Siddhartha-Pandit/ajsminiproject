@@ -10,7 +10,6 @@ export default function NoteList() {
   const navigate = useNavigate();
   const { data, isPending, error } = useFetch(`http://127.0.0.1:8000/notes/`);
   useEffect(() => {
-    console.log("I am the actual data ", data);
     if (data && data.length > 0) {
       const newData = data.map((item) => ({
         id: item.id,
@@ -86,7 +85,6 @@ export default function NoteList() {
           </div>
         </Link>
 
-        {/* Check if data is available before mapping */}
         {data &&
           data.map((note) => (
             <Link
